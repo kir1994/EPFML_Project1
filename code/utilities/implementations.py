@@ -3,12 +3,12 @@ import numpy as np
 def compute_mse_loss(y, tx, w):
     """ Calculate the MSE loss """
     return np.sum((y - tx.dot(w))**2) / (2. * y.shape[0])
-	
+
 def compute_mae_loss(y, tx, w):
     """ Calculate the MAE loss """
-    return np.sum(np.abs(y - tx.dot(w)) / (2. * y.shape[0])
+    return np.sum(np.abs(y - tx.dot(w)) / (2. * y.shape[0]))
 
-	
+
 def compute_mse_gradient(y, tx, w):
     """ Gradient for MSE loss """
     return -tx.T.dot(y - tx.dot(w))/ y.shape[0]
@@ -52,9 +52,9 @@ def stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_loss
     ws = [initial_w]
     losses = []
     w = initial_w
-	y_cur = y
-	tx_cur = tx
-    for n_iter in range(max_iters):	
+    y_cur = y
+    tx_cur = tx
+    for n_iter in range(max_iters):
         # If batch size = -1, do normal gradient descent
         if batch_size > 0:
             indices = np.random.permutation(y.shape[0])
@@ -75,18 +75,19 @@ def stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_loss
               bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]))
 
     return ws[-1], losses[-1]
-	
-	
-def least_squares_GD(y, tx, initial w, max iters, gamma):
+
+
+def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     return stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_mse_loss, compute_mse_gradient)
-	
-def least_squares_SGD(y, tx, initial w, max iters, gamma):
+
+
+def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
     return stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_mse_loss, compute_mse_gradient, batch_size = 1)
-	
-	
+
+
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     return stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_logistic_loss, compute_logistic_gradient)
-	
+
+
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     return stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_logistic_loss, compute_logistic_gradient, lambda_ = lambda_)
-	
