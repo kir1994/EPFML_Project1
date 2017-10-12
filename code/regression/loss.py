@@ -11,7 +11,7 @@ def compute_mse_loss(y, tx, w, lambda_=0):
 def compute_mse_loss_poly(y, tx, w, lambda_=0, degree=1):
     """ Calculate the MSE loss """
     x_poly = build_poly(tx, degree)
-    return np.sum((y - x_poly.dot(w)) ** 2) / (2. * y.shape[0]) + lambda_ * w.dot(w.T)
+    return compute_mse_loss(y, x_poly, w, lambda_)
 
 
 def compute_rmse_loss(y, tx, w, lambda_=0):

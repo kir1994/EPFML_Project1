@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_loss, compute_gradient, batch_size=-1,**kwargs):
+def stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_loss, compute_gradient, batch_size=-1, **kwargs):
     """ Stochastic gradient descent algorithm """
     # Define parameters to store w and loss
     ws = [initial_w]
@@ -18,8 +18,8 @@ def stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_loss
             y_cur = y[indices[:batch_size]]
 
         # Compute gradient and loss
-        loss = compute_loss(y_cur, tx_cur, w, kwargs)
-        grad = compute_gradient(y_cur, tx_cur, w, kwargs)
+        loss = compute_loss(y_cur, tx_cur, w, **kwargs)
+        grad = compute_gradient(y_cur, tx_cur, w, **kwargs)
 
         # Update w by gradient
         w = w - gamma * grad

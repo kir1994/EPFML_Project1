@@ -10,8 +10,7 @@ def split_data(x, y, ratio, seed=1):
     # set seed
     np.random.seed(seed)
 
-    indices = np.array([i for i in range(y.shape[0])])
-    np.random.shuffle(indices)
+    indices = np.random.permutation(y.shape[0])
     train_size = int(y.shape[0] * ratio)
 
     return x[indices[:train_size]], y[indices[:train_size]], x[indices[train_size:]], y[indices[train_size:]]
