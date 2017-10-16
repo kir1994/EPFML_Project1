@@ -10,7 +10,9 @@ def compute_pca(x, number_pc=-1):
     # Spectral analysis
     Sigma = x_c.T.dot(x_c)/D
     values, vectors = np.linalg.eig(Sigma)
-    values, vectors = zip(*sorted(zip(values, vectors), reverse=True)) # eigenvalues and eigenvectors sorted together in decreasing order
+    idx = values.argsort()[::-1] # eigenvalues and eigenvectors sorted together in decreasing order
+    values = values[idx]
+    vectors = vectors[:, idx]
 
     # Selecting the principal components
     if number_pc < 0:
@@ -20,8 +22,8 @@ def compute_pca(x, number_pc=-1):
         while sum_values/rank < 0.95:
             sum_values += values[number_pc]
             number_pc += 1
-    pc = x_c.dot(np.array(vectors[:number_pc]).T) + np.ones((N, 1)).dot(g[:number_pc].reshape((1, number_pc)))
-    return pc, vectors[:number_pc]
+    pc = x_c.dot(vectors[:, :number_pc]) + np.ones((N, 1)).dot(g[:number_pc].reshape((1, number_pc)))
+    return pc, vectors[:, :number_pc]
 
 
 
