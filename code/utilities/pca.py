@@ -21,7 +21,7 @@ def compute_pca(x, number_pc=-1):
             sum_values += values[number_pc]
             number_pc += 1
     pc = x_c.dot(np.array(vectors[:number_pc]).T) + np.ones((N, 1)).dot(g[:number_pc].reshape((1, number_pc)))
-    return pc
+    return pc, vectors[:number_pc]
 
 
 
