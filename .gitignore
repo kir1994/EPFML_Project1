@@ -5,3 +5,4 @@ code/data/train.csv
 code/data/test_excel.xlsx
 code/data/train_excel.xlsx
 code/submission/nico_PCA_subm.csv
+code/submission/nico_LS_subm.csv
