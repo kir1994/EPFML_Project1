@@ -29,7 +29,8 @@ def compute_mae_loss(y, tx, w):
     return np.sum(np.abs(y - tx.dot(w)) / (2. * y.shape[0]))
 
 
+	
 def compute_logistic_loss(y, tx, w, lambda_ = 0):
     """ Log-loss for logistic regression """
-    return -np.sum(y * np.log(sigmoid(tx, w)) + (1 - y) * np.log(1 - sigmoid(tx, w))) / y.shape[0] + \
-        lambda_ * w[np.newaxis, :].dot(w[:, np.newaxis])
+    return np.sum(np.log(1+np.exp(tx.dot(w))) - y*tx.dot(w)) + \
+        lambda_ * w[np.newaxis, :].dot(w[:, np.newaxis])[0, 0]

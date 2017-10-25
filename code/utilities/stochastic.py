@@ -27,8 +27,8 @@ def stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_loss
         # Store w and loss
         ws.append(w)
         losses.append(loss)
-        print("Stochastic Gradient Descent({bi}/{ti}): loss={l}, w0={w0}, w1={w1}".format(
-            bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]))
+        if n_iter % 100 == 0:
+            print("Stochastic Gradient Descent({bi}/{ti}): loss={l}, w0={w0}, w1={w1}".format(bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]))
 
     return ws[-1], losses[-1]
 
@@ -36,3 +36,7 @@ def stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma, compute_loss
 def sigmoid(tx, w):
     """ Logistic function """
     return 1 / (1 + np.exp(-tx.dot(w)))
+	
+def sigmoid(z):
+    """ Logistic function """
+    return 1 / (1 + np.exp(-z))
