@@ -3,9 +3,9 @@ from regression.loss import compute_mse_loss, compute_mae_loss, compute_logistic
 from numpy import newaxis
 
 
-def compute_mse_gradient(y, tx, w):
+def compute_mse_gradient(y, tx, w, lambda_ = 0):
     """ Gradient for MSE loss """
-    return -tx.T.dot(y - tx.dot(w)) / y.shape[0]
+    return -tx.T.dot(y - tx.dot(w)) / y.shape[0] + 2 * w * lambda_
 
 
 def compute_mae_gradient(y, tx, w):
@@ -18,7 +18,7 @@ def compute_mae_gradient(y, tx, w):
 
 def compute_logistic_gradient(y, tx, w, lambda_=0):
     """ Gradient for logistic loss """
-    return (y - sigmoid(tx, w))[newaxis, :].dot(tx) + lambda_ / y.shape[0] * w[newaxis, :]
+    return tx.T.dot(sigmoid(tx.dot(w)) - y) + lambda_ / y.shape[0] * w
 
 
 def least_squares_gd(y, tx, initial_w, max_iters, gamma):
