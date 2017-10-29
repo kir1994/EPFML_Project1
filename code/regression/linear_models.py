@@ -13,7 +13,15 @@ def ridge_regression(y, tx, lambda_):
 
 def build_poly(x, degree):
     """polynomial basis functions for input data x, for j=0 up to j=degree."""
-    return np.array([x ** j for j in range(degree + 1)]).T
+    """ Build polynomial features out of the given data, up to degree 'd' >= 1 """
+    # At least degree 1
+    if degree < 1:
+        degree = 1
+    
+    tx = np.ones((x.shape[0], 1))
+    for i in range(degree):
+        tx = np.hstack((tx, x**(i+1)))
+    return tx
 
 
 def polynomial_regression(y, tx, lambda_, degree):
