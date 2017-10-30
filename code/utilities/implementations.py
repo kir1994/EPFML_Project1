@@ -86,11 +86,8 @@ def least_squares(y, tx):
     """ Least squares regression using normal equations """
     try:
         w = np.linalg.solve(tx.T.dot(tx), tx.T.dot(y))
-    except np.linalg.linalg.LinAlgError as err:
-        if 'Singular matrix' in err.message:
-            w = np.linalg.lstsq(tx.T.dot(tx), tx.T.dot(y))[0]
-        else:
-            raise
+    except np.linalg.linalg.LinAlgError:
+        w = np.linalg.lstsq(tx.T.dot(tx), tx.T.dot(y))[0]
     loss = compute_mse_loss(y, tx, w)
     return w, loss
 

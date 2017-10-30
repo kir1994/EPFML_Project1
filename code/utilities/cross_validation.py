@@ -16,14 +16,25 @@ def split_data(x, y, ratio, seed=1):
     return x[indices[:train_size]], y[indices[:train_size]], x[indices[train_size:]], y[indices[train_size:]]
 
 
-def build_k_indices(y, k_fold, seed):
+def build_k_indices(y, k_fold, seed, stratification=False):
     """build k indices for k-fold."""
-    num_row = y.shape[0]
-    interval = int(num_row / k_fold)
-    np.random.seed(seed)
-    indices = np.random.permutation(num_row)
-    k_indices = [indices[k * interval: (k + 1) * interval]
-                 for k in range(k_fold)]
+    if stratification:
+        b_indices = np.argwhere(y <= 0).ravel()
+        s_indices = np.argwhere(y >  0).ravel()
+        
+        b_k_indices = build_k_indices(b_indices, k_fold, seed)
+        s_k_indices = build_k_indices(s_indices, k_fold, seed)
+        
+        k_indices = [np.hstack((b_indices[b_k_indices[i]], 
+                               s_indices[s_k_indices[i]]))
+                     for i in range(k_fold)]
+    else:
+        num_row = y.shape[0]
+        interval = int(num_row / k_fold)
+        np.random.seed(seed)
+        indices = np.random.permutation(num_row)
+        k_indices = [indices[k * interval: (k + 1) * interval]
+                     for k in range(k_fold)]
     return np.array(k_indices)
 
 
