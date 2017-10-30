@@ -31,3 +31,49 @@ def build_poly(x, d=1):
     for i in range(d):
         tx = np.c_[tx, x**(i+1)]
     return tx
+
+def standardize_missing(x, x_missing_mask):
+    """ Standardize the data and set the missing values to 0(=the mean) """
+    # Normalize and center the data considering ONLY the correct values
+    x_mean = np.zeros(x.shape[1])
+    x_std  = np.zeros(x.shape[1])
+
+    # Loop on the features, compute the mean/std without the missing values
+    for i in range(x.shape[1]):
+        feature_values = x[x_missing_mask[:, i], i]
+        x_mean[i] = feature_values.mean()
+        x_std[i]  = feature_values.std()
+    
+    # Normalize and center the data
+    x_norm = (x - x_mean) / x_std
+    # Set the missing values to 0 (= the mean)
+    x_norm[np.invert(x_missing_mask)] = 0.
+    return x_norm, x_mean, x_std
+
+def preprocess_data(x_base, degree=1, missing_value=-999.,\
+                    compute_mean_std = True, x_mean = None, x_std = None):
+    """ Pre-process the given data by constructing polynomial features,
+    standardize the results, set the missing values to 0,
+    and finally add binary features (cf. report for more informations) """
+    # Build polynomial features
+    x = build_poly(np.delete(x_base, 22, axis=1), degree)
+    
+    # Create a mask for the missing values (=False)
+    x_base_mask = (np.delete(x_base, 22, axis=1) != -999.)
+    x_mask = x_base_mask
+    for i in range(degree-1):
+        x_mask = np.c_[x_mask, x_base_mask]
+    
+    # Standardize the features, and set the missing values to 0(=the mean)
+    if compute_mean_std:
+        tx, x_mean, x_std = standardize_missing(x[:,1:], x_mask)
+        tx = np.c_[np.ones(x.shape[0]), tx]
+    else:
+        tx = np.c_[x[:,0], (x[:,1:] - x_mean) / x_std]
+        tx_mask = np.c_[np.ones(x.shape[0], dtype=bool), x_mask]
+        tx[np.invert(tx_mask)] = 0.
+    
+    # Add the binary features
+    tx = np.c_[tx, x_base[:,0] == -999, x_base[:,22] == 1, x_base[:,22] == 2 , \
+               x_base[:,22] == 3]
+    return tx, x_mean, x_std
