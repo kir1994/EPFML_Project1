@@ -19,15 +19,13 @@ seed   = 3
 degree = 11
 ratio  = 0.66
 
+# Learn the model
 tx, x_mean, x_std = preprocess_data(x_train, degree)
-
 x_tr, y_tr, x_te, y_te = split_data(tx, y_train, ratio, seed)
-
 w, loss_tr = least_squares(y_tr, x_tr)
 
+# Create a Kaggle submission
 x_kaggle,_,_ = preprocess_data(x_test, degree, compute_mean_std=False, \
                                x_mean=x_mean, x_std=x_std)
-
 y_pred = predict_labels(w, x_kaggle)
-
 create_csv_submission(ids_test, y_pred, "run_submission.csv")

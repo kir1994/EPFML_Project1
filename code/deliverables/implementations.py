@@ -18,7 +18,7 @@ def compute_mae_loss(y, tx, w):
 def compute_logistic_loss(y, tx, w, lambda_ = 0):
 	""" Log-loss for logistic regression """
 	return np.sum(np.log(1. + np.exp(tx.dot(w))) - y * tx.dot(w)) + \
-             lambda_ * w[np.newaxis, :].dot(w[:, np.newaxis])[0, 0]
+             lambda_ / 2. * w[np.newaxis, :].dot(w[:, np.newaxis])[0, 0]
 
 ##### Gradients #####
 def compute_mse_gradient(y, tx, w):

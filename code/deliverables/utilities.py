@@ -34,7 +34,7 @@ def build_poly(x, d=1):
 
 def standardize_missing(x, x_missing_mask):
     """ Standardize the data and set the missing values to 0(=the mean) """
-    # Normalize and center the data considering ONLY the correct values
+    # Create empty arrays to store means and stds
     x_mean = np.zeros(x.shape[1])
     x_std  = np.zeros(x.shape[1])
 
@@ -50,15 +50,15 @@ def standardize_missing(x, x_missing_mask):
     x_norm[np.invert(x_missing_mask)] = 0.
     return x_norm, x_mean, x_std
 
-def preprocess_data(x_base, degree=1, missing_value=-999.,\
+def preprocess_data(x_base, degree=1,\
                     compute_mean_std = True, x_mean = None, x_std = None):
     """ Pre-process the given data by constructing polynomial features,
     standardize the results, set the missing values to 0,
     and finally add binary features (cf. report for more informations) """
-    # Build polynomial features
+    # Build polynomial features (without PRI_jet_num)
     x = build_poly(np.delete(x_base, 22, axis=1), degree)
     
-    # Create a mask for the missing values (=False)
+    # Create a mask for the missing values (missing=False)
     x_base_mask = (np.delete(x_base, 22, axis=1) != -999.)
     x_mask = x_base_mask
     for i in range(degree-1):
@@ -68,7 +68,7 @@ def preprocess_data(x_base, degree=1, missing_value=-999.,\
     if compute_mean_std:
         tx, x_mean, x_std = standardize_missing(x[:,1:], x_mask)
         tx = np.c_[np.ones(x.shape[0]), tx]
-    else:
+    else: # Re-use existing means and stds
         tx = np.c_[x[:,0], (x[:,1:] - x_mean) / x_std]
         tx_mask = np.c_[np.ones(x.shape[0], dtype=bool), x_mask]
         tx[np.invert(tx_mask)] = 0.
