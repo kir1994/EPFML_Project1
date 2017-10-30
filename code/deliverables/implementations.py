@@ -2,7 +2,7 @@
 Contains the 6 implemented ML Method required for the first 
 Machine Learning project.
 
-Authors: Kirill IVANOV, Matthias RAMIREZ, Nicolas TALABOT
+Made by: Kirill IVANOV, Matthias RAMIREZ, Nicolas TALABOT
 """
 import numpy as np
 
