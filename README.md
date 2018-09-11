@@ -1,4 +1,4 @@
-"# EPFML_Project1" 
+# EPFML_Project1
 
 
 def build_poly(x, d=1):
